@@ -1,19 +1,43 @@
 class Tokeniser
     def initialize(inputFileName,  outputFileName)
-        @input = File.open(inputFileName,  "r")
-        @output = File.new(outputFileName,  "w")
+        @input = File.open(inputFileName,  "r")        
+        @output = File.open(outputFileName,  "w") 
     end
     
-    def tokenise(pattern)
+    def splitSentences
+        wordBefore = false
+        sentences = 1
         while line = @input.gets
-            line.split(pattern).each do |token|
-                @output.puts token
+            line.strip.split(/ /).each do |word|
+                word = word.strip
+                if isEndOfSentence(wordBefore,  word) 
+                    word.insert(0,  "\r\n")                    
+                    sentences += 1
+                end
+                @output.puts(word)
+                wordBefore = word
             end
         end
-    end        
+        @output.puts
+        return sentences
+    end
+    
+    def isEndOfSentence(word ,  nextWord)
+        rules = [/.*[.?!]/,  /[A-ZØÅÄÁÐÉÍÓÚÝÞÖ].*/]
+        words = [ word, nextWord]
+        isEnd = true
+        rules.each do |rule|
+            [0, 1].each do |i|
+                if not words[i] =~ rules[i]
+                    isEnd = false
+                end
+            end
+        end
+        return isEnd
+    end
     
     def close
         @input.close
         @output.close
-    end
+    end    
 end
