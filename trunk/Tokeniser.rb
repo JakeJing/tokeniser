@@ -7,11 +7,13 @@ class Tokeniser
     def splitSentences
         wordBefore = false
         sentences = 1
+        tokens = 0
         while line = @input.gets
             line.strip.split(/[ |\n]/).each do |word|
                 word = word.strip
+                tokens += 1
                 if isEndOfSentence(wordBefore,  word) 
-                    puts "#{wordBefore} #{word}"
+                   # puts "#{wordBefore} #{word}"
                     word.insert(0,  "\r\n")                    
                     sentences += 1
                 end
@@ -20,7 +22,7 @@ class Tokeniser
             end
         end
         @output.puts
-        return sentences
+        return [tokens,  sentences]
     end
     
     def isEndOfSentence(word ,  nextWord)
