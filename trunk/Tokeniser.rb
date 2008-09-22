@@ -11,6 +11,7 @@ class Tokeniser
             line.strip.split(/ /).each do |word|
                 word = word.strip
                 if isEndOfSentence(wordBefore,  word) 
+                    puts "#{wordBefore} #{word}"
                     word.insert(0,  "\r\n")                    
                     sentences += 1
                 end
@@ -23,14 +24,12 @@ class Tokeniser
     end
     
     def isEndOfSentence(word ,  nextWord)
-        rules = [/.*[.?!]/,  /[A-ZØÅÄÁÐÉÍÓÚÝÞÖ].*/]
-        words = [ word, nextWord]
+        rules = [/^[^.]*[.?!]$/,  /^[A-ZØÅÄÁÐÉÍÓÚÝÞÖ].*[^\.]$/]
+        words = [word, nextWord]
         isEnd = true
         rules.each do |rule|
             [0, 1].each do |i|
-                if not words[i] =~ rules[i]
-                    isEnd = false
-                end
+                if not words[i] =~ rules[i] then isEnd = false end
             end
         end
         return isEnd
