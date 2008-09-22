@@ -1,5 +1,13 @@
+#!/usr/bin/env ruby
 load "Tokeniser.rb"
 
-tokenise  = Tokeniser.new("../visindavefur.txt",  "output.txt")
-tokenise.tokenise(/ /)
+if ARGV.length != 2
+    exit "Argument count should be 2"
+end
+
+tokenise  = Tokeniser.new(ARGV[0],  ARGV[1])
+numSentences = tokenise.splitSentences
 tokenise.close
+
+puts "Found #{numSentences} sentences"
+
